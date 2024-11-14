@@ -137,6 +137,52 @@ class GhCliAdapter:
             shlex.split(cmd), stdout=subprocess.DEVNULL, check=True
         )  # nosec B603
 
+    @staticmethod
+    def get_repos_list(owner):
+        cmd = f"gh repo list {owner} --source --no-archived --limit 999 --json name"
+        return json.loads(subprocess.run(  # nosec B603
+                shlex.split(cmd),
+                capture_output=True,
+                text=True,
+                check=True,
+            ).stdout
+        )
+
+    @staticmethod
+    def get_labels_info_of(owner, repository):
+        cmd = f"gh label list --repo {owner}/{repository} --json color,description,name"
+        output = subprocess.run(  # nosec B603
+                shlex.split(cmd),
+                capture_output=True,
+                text=True,
+                check=True,
+            ).stdout
+        if not output:
+            return json.loads("[]")
+        else:
+            return json.loads(output)
+
+    @staticmethod
+    def set_label_color(owner, repository, label, new_color):
+        cmd = f"gh label edit \"{label}\" --color {new_color} --repo {owner}/{repository}"
+        subprocess.run(
+            shlex.split(cmd), stdout=subprocess.DEVNULL, check=True
+        )  # nosec B603
+
+    @staticmethod
+    def set_label_description(owner, repository, label, new_description):
+        cmd = f"gh label edit \"{label}\" --description \"{new_description}\" --repo {owner}/{repository}"
+        subprocess.run(
+            shlex.split(cmd), stdout=subprocess.DEVNULL, check=True
+        )  # nosec B603
+
+    @staticmethod
+    def add_label(owner, repository, label):
+        cmd = f"gh label create \"{label['name']}\" --description \"{label['description']}\" --color {label['color']} --repo {owner}/{repository}"
+        subprocess.run(
+            shlex.split(cmd), stdout=subprocess.DEVNULL, check=True
+        )  # nosec B603
+
     # https://github.com/mislav/gh-cp
     @staticmethod
     def download_file(owner, repository, file, file_destination="."):
