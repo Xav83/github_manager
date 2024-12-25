@@ -73,7 +73,9 @@ class GhCliAdapter:
         )
 
     @staticmethod
-    def pr_new_comment(pull_request_number_or_branch, owner, repository, comment_message):
+    def pr_new_comment(
+        pull_request_number_or_branch, owner, repository, comment_message
+    ):
         cmd = f"gh pr comment {pull_request_number_or_branch} -b '{comment_message}' -R {owner}/{repository}"
         subprocess.run(shlex.split(cmd), check=True)  # nosec B603
 
@@ -119,7 +121,7 @@ class GhCliAdapter:
     def pr_create(repository_location, pull_request_title, pull_request_description):
         if not os.path.exists(repository_location):
             raise OSError(f"No git repository found in {repository_location}")
-        cmd = f"gh pr create --title \"{pull_request_title}\" --body \"{pull_request_description}\""
+        cmd = f'gh pr create --title "{pull_request_title}" --body "{pull_request_description}"'
         return subprocess.run(  # nosec B603
             shlex.split(cmd),
             cwd=repository_location,
@@ -140,7 +142,8 @@ class GhCliAdapter:
     @staticmethod
     def get_repos_list(owner):
         cmd = f"gh repo list {owner} --source --no-archived --limit 999 --json name"
-        return json.loads(subprocess.run(  # nosec B603
+        return json.loads(
+            subprocess.run(  # nosec B603
                 shlex.split(cmd),
                 capture_output=True,
                 text=True,
@@ -168,11 +171,11 @@ class GhCliAdapter:
     def get_labels_info_of(owner, repository):
         cmd = f"gh label list --repo {owner}/{repository} --json color,description,name"
         output = subprocess.run(  # nosec B603
-                shlex.split(cmd),
-                capture_output=True,
-                text=True,
-                check=True,
-            ).stdout
+            shlex.split(cmd),
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout
         if not output:
             return json.loads("[]")
         else:
@@ -180,14 +183,14 @@ class GhCliAdapter:
 
     @staticmethod
     def set_label_color(owner, repository, label, new_color):
-        cmd = f"gh label edit \"{label}\" --color {new_color} --repo {owner}/{repository}"
+        cmd = f'gh label edit "{label}" --color {new_color} --repo {owner}/{repository}'
         subprocess.run(
             shlex.split(cmd), stdout=subprocess.DEVNULL, check=True
         )  # nosec B603
 
     @staticmethod
     def set_label_description(owner, repository, label, new_description):
-        cmd = f"gh label edit \"{label}\" --description \"{new_description}\" --repo {owner}/{repository}"
+        cmd = f'gh label edit "{label}" --description "{new_description}" --repo {owner}/{repository}'
         subprocess.run(
             shlex.split(cmd), stdout=subprocess.DEVNULL, check=True
         )  # nosec B603
