@@ -73,8 +73,8 @@ class GhCliAdapter:
         )
 
     @staticmethod
-    def pr_new_comment(pull_request_number, owner, repository, comment_message):
-        cmd = f"gh pr comment {pull_request_number} -b '{comment_message}' -R {owner}/{repository}"
+    def pr_new_comment(pull_request_number_or_branch, owner, repository, comment_message):
+        cmd = f"gh pr comment {pull_request_number_or_branch} -b '{comment_message}' -R {owner}/{repository}"
         subprocess.run(shlex.split(cmd), check=True)  # nosec B603
 
     @staticmethod
@@ -90,8 +90,8 @@ class GhCliAdapter:
         subprocess.run(shlex.split(cmd), check=True)  # nosec B603
 
     @staticmethod
-    def pr_view(pull_request_number, owner, repository):
-        cmd = f"gh pr view {pull_request_number} --json author,baseRefName,comments,commits,headRefName,headRepository,mergeable,mergeStateStatus,number,reviewDecision,reviews,state,statusCheckRollup,url -R {owner}/{repository}"
+    def pr_view(pull_request_number_or_branch, owner, repository):
+        cmd = f"gh pr view {pull_request_number_or_branch} --json author,baseRefName,comments,commits,headRefName,headRepository,mergeable,mergeStateStatus,number,reviewDecision,reviews,state,statusCheckRollup,url -R {owner}/{repository}"
         return json.loads(
             subprocess.run(  # nosec B603
                 shlex.split(cmd), capture_output=True, text=True, check=True
