@@ -149,6 +149,22 @@ class GhCliAdapter:
         )
 
     @staticmethod
+    def repo_view(owner, repository):
+        cmd = f"gh repo view {owner}/{repository} --json defaultBranchRef,deleteBranchOnMerge,hasDiscussionsEnabled,hasIssuesEnabled,hasProjectsEnabled,hasWikiEnabled,isBlankIssuesEnabled,isEmpty,isSecurityPolicyEnabled,isUserConfigurationRepository,issueTemplates,mergeCommitAllowed,pullRequestTemplates,rebaseMergeAllowed,squashMergeAllowed"
+        return json.loads(
+            subprocess.run(  # nosec B603
+                shlex.split(cmd), capture_output=True, text=True, check=True
+            ).stdout
+        )
+
+    @staticmethod
+    def repo_edit(owner, repository, flags):
+        cmd = f"gh repo edit {owner}/{repository} {flags}"
+        subprocess.run(
+            shlex.split(cmd), stdout=subprocess.DEVNULL, check=True
+        )  # nosec B603
+
+    @staticmethod
     def get_labels_info_of(owner, repository):
         cmd = f"gh label list --repo {owner}/{repository} --json color,description,name"
         output = subprocess.run(  # nosec B603
