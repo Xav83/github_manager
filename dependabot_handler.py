@@ -2,7 +2,7 @@ import argparse
 
 from gh_cli_adapter import GhCliAdapter
 
-TOOLS_AUTO_APPROUVED=["cmake", "conan", "clang-format"]
+TOOLS_AUTO_APPROUVED=["clang-format", "cmake", "conan", "ninja", "pytest"]
 
 def get_dependabot_pr(owner):
     return GhCliAdapter.search_prs_from(owner, "app/dependabot")
@@ -27,7 +27,8 @@ def has_running_checks(pr_view):
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--owner", required=True)
-parser.add_argument("--github_id", required=True)
+parser.add_argument("--github-id", required=True)
+parser.add_argument("--with-azure", action='store_true')
 
 args = parser.parse_args()
 
@@ -48,8 +49,11 @@ for pr in prs_list:
         GhCliAdapter.pr_new_comment(pr_view['number'], args.owner, pr_view['headRepository']['name'], "@dependabot merge")
     elif pr_view["reviewDecision"] == "APPROVED" and pr_view["mergeStateStatus"] == "BLOCKED":
         if not(has_running_checks(pr_view)):
-            print(f"🛠 Launching Azure Pipelines on the PR #{pr_view['number']} of the repo {pr_view['headRepository']['name']}.")
-            GhCliAdapter.pr_new_comment(pr_view['number'], args.owner, pr_view['headRepository']['name'], "/azp run")
+            if args.with_azure:
+                print(f"🛠 Launching Azure Pipelines on the PR #{pr_view['number']} of the repo {pr_view['headRepository']['name']}.")
+                GhCliAdapter.pr_new_comment(pr_view['number'], args.owner, pr_view['headRepository']['name'], "/azp run")
+            else:
+                print(f"🕰️😴 The PR #{pr_view['number']} of the repo {pr_view['headRepository']['name']} waits for checks to be triggered.")
         else:
             print(f"⏳ Waiting for Azure Pipelines on the PR #{pr_view['number']} of the repo {pr_view['headRepository']['name']}.")                    
     elif pr_view["mergeStateStatus"] == "UNSTABLE":
