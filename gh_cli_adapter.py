@@ -119,7 +119,7 @@ class GhCliAdapter:
     def pr_create(repository_location, pull_request_title, pull_request_description):
         if not os.path.exists(repository_location):
             raise OSError(f"No git repository found in {repository_location}")
-        cmd = f"gh pr create --title {pull_request_title} --body {pull_request_description}"
+        cmd = f"gh pr create --title \"{pull_request_title}\" --body \"{pull_request_description}\""
         return subprocess.run(  # nosec B603
             shlex.split(cmd),
             cwd=repository_location,

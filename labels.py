@@ -47,14 +47,14 @@ for repo in repos_list:
             continue
         matching_label_info_expected = get_label_info_in_list(repo_label["name"], EXPECTED_LABELS_INFO) 
         if matching_label_info_expected["color"] != repo_label["color"]:
-            print(f"🛠 Fixing the color of the label '{repo_label["name"]}' in the repo {repo["name"]}")
+            print(f"🛠 Fixing the color of the label '{repo_label['name']}' in the repo {repo['name']}")
             GhCliAdapter.set_label_color(args.owner, repo["name"], repo_label["name"], matching_label_info_expected["color"])
         if matching_label_info_expected["description"] != repo_label["description"]:
-            print(f"🛠 Fixing the description of the label '{repo_label["name"]}' in the repo {repo["name"]}")
+            print(f"🛠 Fixing the description of the label '{repo_label['name']}' in the repo {repo['name']}")
             GhCliAdapter.set_label_description(args.owner, repo["name"], repo_label["name"], matching_label_info_expected["description"])
 
     for expected_label_info in EXPECTED_LABELS_INFO:
         if not is_label_in_list(expected_label_info["name"], repo_labels_info):
-            print(f"🛠 Adding the label '{expected_label_info["name"]}' in the repo {repo["name"]}")
+            print(f"🛠 Adding the label '{expected_label_info['name']}' in the repo {repo['name']}")
             GhCliAdapter.add_label(args.owner, repo["name"], expected_label_info)
 
