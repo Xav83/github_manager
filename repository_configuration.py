@@ -76,6 +76,8 @@ for repo in repos_list:
             f"--enable-squash-merge={EXPECTED_CONFIGURATION['squashMergeAllowed']}",
         )
 
+    if repo_view["description"] == "":
+        print(f"🚧 No Description found for the repository {repo['name']}")
     if repo_view["issueTemplates"] == []:
         print(f"🚧 No Issue template found in {repo['name']}")
     if repo_view["pullRequestTemplates"] == []:

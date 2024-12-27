@@ -153,7 +153,7 @@ class GhCliAdapter:
 
     @staticmethod
     def repo_view(owner, repository):
-        cmd = f"gh repo view {owner}/{repository} --json defaultBranchRef,deleteBranchOnMerge,hasDiscussionsEnabled,hasIssuesEnabled,hasProjectsEnabled,hasWikiEnabled,isBlankIssuesEnabled,isEmpty,isSecurityPolicyEnabled,isUserConfigurationRepository,issueTemplates,mergeCommitAllowed,pullRequestTemplates,rebaseMergeAllowed,squashMergeAllowed"
+        cmd = f"gh repo view {owner}/{repository} --json defaultBranchRef,deleteBranchOnMerge,description,hasDiscussionsEnabled,hasIssuesEnabled,hasProjectsEnabled,hasWikiEnabled,isBlankIssuesEnabled,isEmpty,isSecurityPolicyEnabled,isUserConfigurationRepository,issueTemplates,mergeCommitAllowed,pullRequestTemplates,rebaseMergeAllowed,squashMergeAllowed"
         return json.loads(
             subprocess.run(  # nosec B603
                 shlex.split(cmd), capture_output=True, text=True, check=True
