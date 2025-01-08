@@ -2,7 +2,7 @@ import argparse
 
 from gh_cli_adapter import GhCliAdapter
 
-TOOLS_AUTO_APPROUVED = ["clang-format", "cmake", "conan", "ninja", "pytest"]
+TOOLS_AUTO_APPROUVED = ["clang-format", "cmake", "conan", "grpcio-tools", "ninja", "numpy", "pylint", "pytest"]
 
 
 def get_dependabot_pr(owner):
