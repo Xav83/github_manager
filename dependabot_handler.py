@@ -4,6 +4,8 @@ from gh_cli_adapter import GhCliAdapter
 
 TOOLS_AUTO_APPROUVED = ["clang-format", "cmake", "conan", "grpcio-tools", "ninja", "numpy", "pylint", "pytest"]
 
+def format_terminal_hyperlink(url, text):
+    return f"\033]8;;{url}\033\\{text}\033]8;;\033\\"
 
 def get_dependabot_pr(owner):
     return GhCliAdapter.search_prs_from(owner, "app/dependabot")
@@ -40,8 +42,11 @@ def handling_pr_approbation(pr_view, owner, github_id):
                 f"🙌 The PR #{pr_view['number']} (`{matching_tool[0]}` update) of the repo {pr_view['headRepository']['name']} has already been approved by myself."
             )
     elif len(matching_tool) == 0:
+        pr_number_text = format_terminal_hyperlink(
+            pr_view['url'], f"PR #{pr_view['number']}"
+        )
         print(
-            f"🤔 Should we auto-approuve the branch `{pr_view['headRefName']}` by the PR #{pr_view['number']} in the repo {pr_view['headRepository']['name']} ?"
+            f"🤔 Should we auto-approuve the branch `{pr_view['headRefName']}` by the {pr_number_text} in the repo {pr_view['headRepository']['name']} ?"
         )
 
 
