@@ -2,7 +2,7 @@ import argparse
 
 from gh_cli_adapter import GhCliAdapter
 
-TOOLS_AUTO_APPROUVED = ["clang-format", "cmake", "conan", "grpcio-tools", "ninja", "numpy", "pylint", "pytest"]
+TOOLS_AUTO_APPROUVED = ["black", "clang-format", "cmake", "conan", "gcovr", "gitpython", "grpcio-tools", "ninja", "numpy", "pylint", "pytest"]
 
 def format_terminal_hyperlink(url, text):
     return f"\033]8;;{url}\033\\{text}\033]8;;\033\\"
