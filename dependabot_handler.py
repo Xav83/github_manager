@@ -2,10 +2,25 @@ import argparse
 
 from gh_cli_adapter import GhCliAdapter
 
-TOOLS_AUTO_APPROUVED = ["black", "clang-format", "cmake", "conan", "gcovr", "gitpython", "grpcio-tools", "ninja", "numpy", "pylint", "pytest"]
+TOOLS_AUTO_APPROUVED = [
+    {"source": "npm_and_yarn", "package": "prettier"},
+    {"source": "pip", "package": "black"},
+    {"source": "pip", "package": "clang-format"},
+    {"source": "pip", "package": "cmake"},
+    {"source": "pip", "package": "conan"},
+    {"source": "pip", "package": "gcovr"},
+    {"source": "pip", "package": "gitpython"},
+    {"source": "pip", "package": "grpcio-tools"},
+    {"source": "pip", "package": "ninja"},
+    {"source": "pip", "package": "numpy"},
+    {"source": "pip", "package": "pylint"},
+    {"source": "pip", "package": "pytest"},
+]
+
 
 def format_terminal_hyperlink(url, text):
     return f"\033]8;;{url}\033\\{text}\033]8;;\033\\"
+
 
 def get_dependabot_pr(owner):
     return GhCliAdapter.search_prs_from(owner, "app/dependabot")
@@ -25,8 +40,8 @@ def has_been_reviewed_by(pr_view, author):
 def handling_pr_approbation(pr_view, owner, github_id):
     matching_tool = list(
         filter(
-            lambda tool_name, pr_view=pr_view: pr_view["headRefName"].startswith(
-                f"dependabot/pip/{tool_name}"
+            lambda tool, pr_view=pr_view: pr_view["headRefName"].startswith(
+                f"dependabot/{tool['source']}/{tool['package']}-"
             ),
             TOOLS_AUTO_APPROUVED,
         )
