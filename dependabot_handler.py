@@ -58,7 +58,7 @@ def handling_pr_approbation(pr_view, owner, github_id):
             )
     elif len(matching_tool) == 0:
         pr_number_text = format_terminal_hyperlink(
-            pr_view['url'], f"PR #{pr_view['number']}"
+            pr_view["url"], f"PR #{pr_view['number']}"
         )
         print(
             f"🤔 Should we auto-approuve the branch `{pr_view['headRefName']}` by the {pr_number_text} in the repo {pr_view['headRepository']['name']} ?"
