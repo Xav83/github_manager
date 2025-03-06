@@ -46,20 +46,21 @@ def handling_pr_approbation(pr_view, owner, github_id):
             TOOLS_AUTO_APPROUVED,
         )
     )
+    pr_number_text = format_terminal_hyperlink(
+        pr_view["url"], f"PR #{pr_view['number']}"
+    )
+
     if len(matching_tool) == 1:
         if not has_been_reviewed_by(pr_view, github_id):
             print(
-                f"🤝 Approving the PR #{pr_view['number']} (`{matching_tool[0]}` update) of the repo {pr_view['headRepository']['name']}"
+                f"🤝 Approving the PR #{pr_number_text} (`{matching_tool[0]['package']}` update) of the repo {pr_view['headRepository']['name']}"
             )
             GhCliAdapter.pr_approve(pr_view["number"], owner, pr["repository"]["name"])
         else:
             print(
-                f"🙌 The PR #{pr_view['number']} (`{matching_tool[0]}` update) of the repo {pr_view['headRepository']['name']} has already been approved by myself."
+                f"🙌 The PR #{pr_number_text} (`{matching_tool[0]['package']}` update) of the repo {pr_view['headRepository']['name']} has already been approved by myself."
             )
     elif len(matching_tool) == 0:
-        pr_number_text = format_terminal_hyperlink(
-            pr_view["url"], f"PR #{pr_view['number']}"
-        )
         print(
             f"🤔 Should we auto-approuve the branch `{pr_view['headRefName']}` by the {pr_number_text} in the repo {pr_view['headRepository']['name']} ?"
         )
@@ -88,9 +89,12 @@ prs_list = get_dependabot_pr(args.owner)
 
 for pr in prs_list:
     pr_view = GhCliAdapter.pr_view(pr["number"], args.owner, pr["repository"]["name"])
+    pr_number_text = format_terminal_hyperlink(
+        pr_view["url"], f"PR #{pr_view['number']}"
+    )
     if pr_view["mergeStateStatus"] == "BEHIND":
         print(
-            f"🔄 Updating the PR #{pr_view['number']} of the repo {pr_view['headRepository']['name']} to date."
+            f"🔄 Updating the PR #{pr_number_text} of the repo {pr_view['headRepository']['name']} to date."
         )
         GhCliAdapter.pr_new_comment(
             pr_view["number"],
@@ -100,7 +104,7 @@ for pr in prs_list:
         )
     elif pr_view["mergeable"] == "CONFLICTING":
         print(
-            f"🔄 Updating the PR #{pr_view['number']} of the repo {pr_view['headRepository']['name']} to date."
+            f"🔄 Updating the PR #{pr_number_text} of the repo {pr_view['headRepository']['name']} to date."
         )
         GhCliAdapter.pr_new_comment(
             pr_view["number"],
@@ -115,7 +119,7 @@ for pr in prs_list:
         and pr_view["mergeStateStatus"] == "CLEAN"
     ):
         print(
-            f"✅ The PR #{pr_view['number']} of the repo {pr_view['headRepository']['name']} can be merged."
+            f"✅ The PR #{pr_number_text} of the repo {pr_view['headRepository']['name']} can be merged."
         )
         GhCliAdapter.pr_new_comment(
             pr_view["number"],
@@ -130,7 +134,7 @@ for pr in prs_list:
         if not (has_running_checks(pr_view)):
             if args.with_azure:
                 print(
-                    f"🛠 Launching Azure Pipelines on the PR #{pr_view['number']} of the repo {pr_view['headRepository']['name']}."
+                    f"🛠 Launching Azure Pipelines on the PR #{pr_number_text} of the repo {pr_view['headRepository']['name']}."
                 )
                 GhCliAdapter.pr_new_comment(
                     pr_view["number"],
@@ -140,19 +144,19 @@ for pr in prs_list:
                 )
             else:
                 print(
-                    f"🕰️😴 The PR #{pr_view['number']} of the repo {pr_view['headRepository']['name']} waits for checks to be triggered."
+                    f"🕰️😴 The PR #{pr_number_text} of the repo {pr_view['headRepository']['name']} waits for checks to be triggered."
                 )
         else:
             print(
-                f"⏳ Waiting for Azure Pipelines on the PR #{pr_view['number']} of the repo {pr_view['headRepository']['name']}."
+                f"⏳ Waiting for Azure Pipelines on the PR #{pr_number_text} of the repo {pr_view['headRepository']['name']}."
             )
     elif pr_view["mergeStateStatus"] == "UNSTABLE":
         print(
-            f"🔴 The PR #{pr_view['number']} of the repo {pr_view['headRepository']['name']} has some failing checks."
+            f"🔴 The PR #{pr_number_text} of the repo {pr_view['headRepository']['name']} has some failing checks."
         )
     elif pr_view["mergeStateStatus"] == "UNKNOWN":
         print(
-            f"⚪ The PR #{pr_view['number']} of the repo {pr_view['headRepository']['name']} is in an unkown state.\n-- You should probable wait for GitHub to update the state of the PR."
+            f"⚪ The PR #{pr_number_text} of the repo {pr_view['headRepository']['name']} is in an unkown state.\n-- You should probable wait for GitHub to update the state of the PR."
         )
     elif (
         pr_view["reviewDecision"] == "APPROVED"
