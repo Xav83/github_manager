@@ -8,7 +8,7 @@ import time
 class GhCliAdapter:
     @staticmethod
     def get_rate_limit_info():
-        cmd = "gh api rate_limit"
+        cmd = "gh api --method GET rate_limit"
         return json.loads(
             subprocess.run(  # nosec B603
                 shlex.split(cmd), capture_output=True, text=True, check=True
