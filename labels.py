@@ -11,6 +11,11 @@ EXPECTED_LABELS_INFO = [
         "description": "Updates ar least one external dependency",
     },
     {
+        "name": "devops",
+        "color": "fbca04",
+        "description": "This issue or pull request is related to DevOps practices",
+    },
+    {
         "name": "documentation",
         "color": "0075ca",
         "description": "Improvements or additions to documentation",
