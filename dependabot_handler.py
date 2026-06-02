@@ -6,6 +6,7 @@ TOOLS_AUTO_APPROUVED = [
     {"source": "npm_and_yarn", "package": "prettier"},
     {"source": "pip", "package": "black"},
     {"source": "pip", "package": "clang-format"},
+    {"source": "pip", "package": "clang-tidy"},
     {"source": "pip", "package": "cmake"},
     {"source": "pip", "package": "conan"},
     {"source": "pip", "package": "gcovr"},
