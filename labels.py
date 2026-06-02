@@ -31,6 +31,11 @@ EXPECTED_LABELS_INFO = [
         "color": "008672",
         "description": "Extra attention is needed",
     },
+    {
+        "name": "javascript",
+        "color": "168700",
+        "description": "This issue or pull request is related to JavaScript code",
+    },
     {"name": "invalid", "color": "e4e669", "description": "This doesn't seem right"},
     {
         "name": "python",
@@ -79,7 +84,7 @@ for repo in repos_list:
     for repo_label in repo_labels_info:
         if not is_label_in_list(repo_label["name"], EXPECTED_LABELS_INFO):
             print(
-                "🤔 Should we add the following label in the 'EXPECTED_LABELS_INFO' ?"
+                f"🤔 Should we add the label '{repo_label['name']}' in the 'EXPECTED_LABELS_INFO' structure ?"
             )
             print(repo_label)
             continue
