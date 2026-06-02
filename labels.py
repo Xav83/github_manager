@@ -120,6 +120,6 @@ for repo in repos_list:
     for expected_label_info in EXPECTED_LABELS_INFO:
         if not is_label_in_list(expected_label_info["name"], repo_labels_info):
             print(
-                f"🛠 Adding the label '{expected_label_info['name']}' in the repo {repo['name']}"
+                f"➕ Adding the label '{expected_label_info['name']}' in the repo {repo['name']}"
             )
             GhCliAdapter.add_label(args.owner, repo["name"], expected_label_info)
