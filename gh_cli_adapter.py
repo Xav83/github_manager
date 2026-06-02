@@ -66,11 +66,14 @@ class GhCliAdapter:
             ):
                 time.sleep(1)
         cmd = f"gh search prs --owner {repository_owner} --state {pr_state} --author {author} --archived=false --json number,repository --limit 999"
-        return json.loads(
-            subprocess.run(  # nosec B603
+        try:
+            cmd_output = subprocess.run(  # nosec B603
                 shlex.split(cmd), capture_output=True, text=True, check=True
-            ).stdout
-        )
+            )
+        except subprocess.CalledProcessError as e:
+            print(f"Error while executing command: {cmd}\nError message: {e.stderr}")
+            raise e
+        return json.loads(cmd_output.stdout)
 
     @staticmethod
     def pr_new_comment(
